@@ -9,4 +9,7 @@ class AuthenticationParams {
   final String secret;
 
   const AuthenticationParams({required this.email, required this.secret});
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{"email": email, "password": secret};
 }
