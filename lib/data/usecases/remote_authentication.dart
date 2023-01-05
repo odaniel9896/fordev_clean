@@ -1,4 +1,4 @@
-import 'package:fordev/data/models/remote_account_model.dart';
+import '../models/remote_account_model.dart';
 
 import '../../domain/entities/entities.dart';
 
@@ -8,16 +8,18 @@ import '../../domain/usecases/usecases.dart';
 
 import '../http/http.dart';
 
-class RemoteAuthentication {
+class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
   final String url;
 
   const RemoteAuthentication({required this.httpClient, required this.url});
 
+  @override
   Future<AccoutEntity> auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
-      final httpResponse = await httpClient.request(url: url, method: "post", body: body);
+      final httpResponse =
+          await httpClient.request(url: url, method: "post", body: body);
       return RemoteAccoutModel.fromJson(httpResponse!).toEntity();
     } on HttpError catch (error) {
       throw error == HttpError.unauthorized
