@@ -11,14 +11,14 @@ class HttpAdapter {
   final Client client;
   HttpAdapter(this.client);
 
-  Future<void>? request(
+  Future<Response>? request(
       {required String url, required String method, Map? body}) async {
     final headers = {
       'content-type': 'application/json',
       'accept': "application/json"
     };
     final jsonBody = body != null ? jsonEncode(body) : null;
-    await client.post(Uri.parse(url), headers: headers, body: jsonBody);
+    return await client.post(Uri.parse(url), headers: headers, body: jsonBody);
   }
 }
 
@@ -41,15 +41,10 @@ void main() {
   });
   group('post', () {
     test('Should call post with correct values', () async {
-      await sut
+      final response = await sut
           .request(url: url, method: "post", body: {'any_key': 'any_value'});
 
-      // verify(client.post(Uri.parse(url),
-      //     headers: {
-      //       'content-type': 'application/json',
-      //       'accept': "application/json"
-      //     },
-      //     body: '{"any_key": "any_value"}'));
+      expect(response!.body, '{"id":123}');
     });
 
     // test('Should call post without body', () async {
